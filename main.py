@@ -1,29 +1,47 @@
 import re
 
 
-def parse(query: str) -> dict:
+def parse_cookie(query: str) -> dict:
     d = {}
     lenght = len(query)
     index_1 = query.find('name')
     print(index_1)
-    index_2 = query.find('color')
+    index_2 = query.find('age')
     print(index_2)
-    if index_1 != -1 and index_2 != -1:
+    if index_1 == -1 and index_2 == -1:
         d = {}
     if index_1 != -1 and index_2 != -1:
         name = query[index_1 + 5 : index_2-1]
-        color = query[index_2 + 5 : lenght]
-        color = re.sub("[^A-Za-z]", "", color)
+        age = query[index_2 + 4 : lenght]
+        print(age)
+        age = re.sub("[^0-9]", "", age)
+        print(age)
         d["name"] = name
-        d["color"] = color
+        d["age"] = age
+
     else:
         if index_1 != -1 and index_2 == -1:
-            name = query[index_1 + 4: lenght]
+            name = query[index_1 + 5: lenght]
             name = re.sub("[^A-Za-z]", "", name)
             d["name"] = name
         else:
             if index_1 == -1 and index_2 != -1:
-                color = query[index_2 + 5 : lenght]
-                color = re.sub("[^A-Za-z]", "", color)
-                d["color"] = color
+                age = query[index_2 + 4: lenght]
+                age = re.sub("[^0-9]", "", age)
+                d["age"] = age
+    print(d)
     return d
+
+
+if __name__ == '__main__':
+    assert parse_cookie('name=Dima;') == {'name': 'Dima'}
+    assert parse_cookie('') == {}
+    assert parse_cookie('name=Dima;age=28;') == {'name': 'Dima', 'age': '28'}
+    assert parse_cookie('name=Dima=User;age=28;') == {'name': 'Dima=User', 'age': '28'}
+    assert parse_cookie('name=Dima=User;age=28k,,sjdbf ajkhdgf ajsd;') == {'name': 'Dima=User', 'age': '28'}
+    assert parse_cookie('name=Dima=User;age=28k,,sjdbf ajkhdgf ajsd;') == {'name': 'Dima=User', 'age': '28'}
+    assert parse_cookie('er;age=28;') == {'age': '28'}
+    assert parse_cookie('name=Dima;age=28;') == {'name': 'Dima', 'age': '28'}
+    assert parse_cookie('12345mfjdj djldkshdg') == {}
+    assert parse_cookie('age=35') == {'age': '35'}
+    assert parse_cookie('name=Dima/age=28;') == {'name': 'Dima', 'age': '28'}
