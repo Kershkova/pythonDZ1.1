@@ -28,3 +28,16 @@ def parse(query: str) -> dict:
                 d["color"] = color
     return d
 
+
+if __name__ == '__main__':
+    assert parse('https://example.com/path/to/page?name=ferret&color=purple') == {'name': 'ferret', 'color': 'purple'}
+    assert parse('https://example.com/path/to/page?name=ferret&color=purple&') == {'name': 'ferret', 'color': 'purple'}
+    assert parse('http://example.com/') == {}
+    assert parse('http://example.com/?') == {}
+    assert parse('http://example.com/?name=Dima') == {'name': 'Dima'}
+    assert parse('http:///?name=Dima') == {'name': 'Dima'}
+    assert parse('https://example.com/path/to/page?name=hoooom&color=black') == {'name': 'hoooom', 'color': 'black'}
+    assert parse('https://example.com/path/to/page?=hoooom&color=black') == {'color': 'black'}
+    assert parse('htcom/path/to/page?=hoooom&color=black') == {'color': 'black'}
+    assert parse('https://example.com/path/to/page?numi=hoooom&cplor=black') == {}
+    assert parse('e?name=hoooom&color=black') == {'name': 'hoooom', 'color': 'black'}
