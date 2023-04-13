@@ -5,17 +5,13 @@ def parse_cookie(query: str) -> dict:
     d = {}
     lenght = len(query)
     index_1 = query.find('name')
-    print(index_1)
     index_2 = query.find('age')
-    print(index_2)
     if index_1 == -1 and index_2 == -1:
         d = {}
     if index_1 != -1 and index_2 != -1:
         name = query[index_1 + 5 : index_2-1]
         age = query[index_2 + 4 : lenght]
-        print(age)
         age = re.sub("[^0-9]", "", age)
-        print(age)
         d["name"] = name
         d["age"] = age
 
@@ -29,7 +25,6 @@ def parse_cookie(query: str) -> dict:
                 age = query[index_2 + 4: lenght]
                 age = re.sub("[^0-9]", "", age)
                 d["age"] = age
-    print(d)
     return d
 
 
